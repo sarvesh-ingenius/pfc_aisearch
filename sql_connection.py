@@ -1,12 +1,13 @@
+from config import config
 import pymysql
 import pandas as pd
-from flask import current_app as app
+
 
 conn = pymysql.connect(
-    host=app.config['hostname'],
-    user=app.config['username'],
-    password=app.config['password'],
-    db=app.config['dbname'],
+    host=config['hostname'],
+    user=config['username'],
+    password=config['password'],
+    db=config['dbname'],
 )
 
 

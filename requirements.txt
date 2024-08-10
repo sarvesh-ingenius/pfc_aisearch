@@ -9,3 +9,4 @@ sqlparse
 openai
 langchain_community
 flask
+sentencepiece

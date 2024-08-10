@@ -1,11 +1,12 @@
 from flask import request
 from flask import Flask
 
+
+
+# cache = {}
+
 from aisearch import aisearch
-
-cache = {}
 app = Flask(__name__)
-
 
 @app.route('/')
 def hello_world():  # put application's code here

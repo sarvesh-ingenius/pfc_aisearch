@@ -1,5 +1,4 @@
-prompt = """### Task
-Generate a SQL query to answer [QUESTION]{question}[/QUESTION]
+task_prompt= """Generate a SQL query to answer [QUESTION]{question}[/QUESTION]
 
 ### Instructions
 - If you cannot answer the question with the available database schema, return 'I do not know'
@@ -11,8 +10,9 @@ Generate a SQL query to answer [QUESTION]{question}[/QUESTION]
 - Schema contains the foreign and primary keys use these key to join the tables
 - Don't use columns which are not present in the create table schemas
 ### Database Schema
-This query will run on a database whose schema is represented in this string:
+This query will run on a database whose schema is represented in this string:"""
 
+schemas_string = """
 create table categories_master
 (
     category_id   int auto_increment
@@ -221,9 +221,9 @@ create table sentiment_trend_data_product
     primary key (news_date_id, commodity_id, title),
 
 )
-    charset = utf8mb3;
+    charset = utf8mb3; """
 
-### Joins
+joins_prompts = """
 -- Use the contraints mentioned below as primary and foreign keys to join the tables
 -- sales.product_id can be joined with products.product_id
 -- sales.customer_id can be joined with customers.customer_id
@@ -249,13 +249,15 @@ foreign key (trade_date_id) references dates_master (date_id)
 foreign key (commodity_id) references commodities_master (commodity_id),
 foreign key (publishing_date_id) references dates_master (date_id)
 foreign key (news_date_id) references dates_master (date_id),
-foreign key (commodity_id) references commodities_master (commodity_id)
-### Example
+foreign key (commodity_id) references commodities_master (commodity_id) """
+examples_prompt = """
 Question: find all sentiments news for corn
 Answer: Select *
 from sentiment_trend_data_product inner join commodities_master on commodities_master.commodity_id = sentiment_trend_data_product.commodity_id where commodities_master.actual_name = 'Corn'
-
-### Answer
-Given the database schema, here is the SQL query that answers [QUESTION]{question}[/QUESTION]
+"""
+answer_prompt = """Given the database schema, here is the SQL query that answers [QUESTION]{question}[/QUESTION]
 [SQL]
 """
+
+prompt = f'{task_prompt}{schemas_string}{joins_prompts}{examples_prompt}{answer_prompt}'
+prompt1 = f'tables:\n{schemas_string} query for:{{question}}'

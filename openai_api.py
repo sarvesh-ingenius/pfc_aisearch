@@ -1,9 +1,9 @@
-from flask import current_app as app
+from config import   config
 from openai import OpenAI
 
 
 def prompt_template():
-    return """You are a Business and Data analyst assistant in converting questions asked in plain English language into mathematical, graphical and data driven answers with summary
+    return """You are a Business and Data analyst assistant in converting questions asked in plain English language into mathematical and data driven answers with summary
         Here are the details you'll need:
         
         The data retrieved from the in tabular format
@@ -15,7 +15,7 @@ def prompt_template():
         
         
         Your Task:
-        Based on the given dataframe, English question, and urls on internet, present the summary and charts for a business user.
+        Based on the given dataframe, English question, and urls on internet, present the summary  for a business user.
         English Question: {question}"""
 
 
@@ -24,13 +24,15 @@ def create_prompt(prompt_template, data_df, question):
     return prompt
 
 
-client = OpenAI(api_key=app.config['api_key'])  # Pass the API key here
+client = OpenAI(api_key=config['api_key'])  # Pass the API key here
 
 
 def generate_response(prompt_final):
     try:
-        response = client.chat.completions.create(model="gpt-4o", messages=[{"role": "user", "content": prompt_final}
-            , {"role": "user", "content": 'Use the data from data_df input only'}])
+        response = client.chat.completions.create(model="gpt-4o",
+              messages=[{"role": "user", "content": prompt_final}
+            ,{"role": "user", "content": 'Use the data from data_df input only'}
+            ,{"role": "user", "content": 'create the final output in well formatted HTML'}])
         return response.choices[0].message.content
     except Exception as e:
         return f"An error occurred: {e}"
