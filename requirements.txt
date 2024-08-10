@@ -1,0 +1,11 @@
+pandas
+sqlalchemy
+pymysql
+torch
+transformers
+bitsandbytes
+accelerate
+sqlparse
+openai
+langchain_community
+flask
